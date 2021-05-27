@@ -6,7 +6,7 @@
 
 Resource Icons is a Foundry VTT module that adds customizable icons to tokens to track resources.
 
-<img src="/img/demo.png"/>
+<img src="/img/demo.png" width="500"/>
 
 ## Usage
 
@@ -18,6 +18,12 @@ If no icon image is selected, the default icon image is a white circle.
 
 The border, background, and tint of each icon can be individually set.
 
-<img src="/img/config.png">
+<img src="/img/config.png" width="500"/>
 
-The border shape (circle/square) and where the resource icons are anchored (above/below/left of/right of token) can be changed in the module settings (per user with an option to use world default).
+The border shape (circle/square) and where the resource icons are anchored (above/below/left of/right of token) can be changed in the module settings (per user with an option to use world default set by GM).
+
+## Technical Notes
+
+Resource Icons patches (via lib-wrapper) `CONFIG.Token.objectClass.prototype.draw` to implement resource icon drawing. This drawing is handled by a new method added to the Token object class: `drawResourceIcons`. This method adds three PIXI container children to the token. Each of these PIXI containers themselves are assigned three PIXI children (based on resource icon configuration): background (which encompasses border), icon image, and value text.
+
+Resource Icons also patches `CONFIG.Token.objectClass.prototype._onUpdate` to handle changes to resource icon configuration (in which case `drawResourceIcons` is called to re-draw the icons) and to handle changes to resoure values when a token's actor is updated. This updated is handled by another new method added to the Token object class: `updateResourceIconValues`. This method simply changes the value text child of each PIXI container to the new value of the assigned resource.
