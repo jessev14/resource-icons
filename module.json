@@ -1,0 +1,19 @@
+{
+    "name": "resourceIcons",
+    "title": "Resource Icons",
+    "description": "",
+    "author": "enso#0361",
+    "version": "1.0.0",
+    "minimumCoreVersion": "0.8.1",
+    "compatibleCoreVersion": "0.8.5",
+    "esmodules": [
+        "scripts/resourceIcons.js"
+    ],
+    "languages": [
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "lang/en.json"
+        }
+    ]
+}

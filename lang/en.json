@@ -1,0 +1,13 @@
+{
+    "resourceIcons.application": {
+        "title": "Resource Icon Config",
+        "icon": "Icon",
+        "options": "Options",
+        "background": "Background",
+        "backgroundColor": "Background Color",
+        "border": "Border",
+        "borderColor": "Border Color",
+        "tint": "Icon Tint",
+        "tintColor": "Icon Tint Color"
+    }
+} 
