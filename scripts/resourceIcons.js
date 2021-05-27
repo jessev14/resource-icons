@@ -10,10 +10,10 @@ Hooks.once("init", () => {
         config: true,
         type: String,
         choices: {
-            square: "Square",
-            circle: "Circle"
+            circle: "Circle",
+            square: "Square"
         },
-        default: "square",
+        default: "circle",
         onChange: () => window.location.reload()
     });
 
