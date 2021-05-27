@@ -18,7 +18,7 @@ If no icon image is selected, the default icon image is a white circle.
 
 The border, background, and tint of each icon can be individually set.
 
-<img src="/img/config.png" width="500"/>
+<img src="/img/config2.png" width="500"/>
 
 The border shape (circle/square) and where the resource icons are anchored (above/below/left of/right of token) can be changed in the module settings (per user with an option to use world default set by GM).
 
