@@ -1,4 +1,5 @@
 import { containerPosition, getSetting } from './helpers.js';
+import { libWrapper } from '../lib/shim.js';
 
 Hooks.once("init", () => {
     // Register module settings
@@ -84,11 +85,10 @@ Hooks.once("setup", () => {
     }    
 
     // Patch Token draw method to include resource icon drawing
-    const og_draw = CONFIG.Token.objectClass.prototype.draw;
-    CONFIG.Token.objectClass.prototype.draw = newDraw;
-    async function newDraw(toggle = false) {
+    libWrapper.register("resourceIcons", "CONFIG.Token.objectClass.prototype.draw", newDraw, "WRAPPER");
+    async function newDraw(wrapped, ...args) {
         // Call patched method
-        const _this = await og_draw.call(this);
+        const _this = await wrapped(...args);
 
         // Create resourceIcons parent container (as child of Token PIXI container)
         _this.resourceIcons = _this.addChild(new PIXI.Container());
@@ -190,10 +190,9 @@ Hooks.once("setup", () => {
     }
 
     // Patch _onUpdate method of Token class to re-draw resource icons or update resource icon values
-    const og_onUpdate = CONFIG.Token.objectClass.prototype._onUpdate;
-    CONFIG.Token.objectClass.prototype._onUpdate = new_onUpdate;
-    function new_onUpdate(data, options, userId) {
-        og_onUpdate.call(this, data, options, userId);
+    libWrapper.register("resourceIcons", "CONFIG.Token.objectClass.prototype._onUpdate", new_onUpdate, "WRAPPER");
+    function new_onUpdate(wrapped, data, options, userId) {
+        wrapped(data, options, userId);
         if (data.flags?.resourceIcons) this.drawResourceIcons();
         else if (data.actorData) this.updateResourceIconValues();
     }
