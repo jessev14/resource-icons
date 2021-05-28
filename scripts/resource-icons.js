@@ -1,9 +1,11 @@
+// flags.resource_icons works
+
 import { containerPosition, getSetting } from './helpers.js';
 import { libWrapper } from '../lib/shim.js';
 
 Hooks.once("init", () => {
     // Register module settings
-    game.settings.register("resourceIcons", "world-borderShape", {
+    game.settings.register("resource-icons", "world-borderShape", {
         name: "World Default: Border Shape",
         hint: "",
         scope: "world",
@@ -17,7 +19,7 @@ Hooks.once("init", () => {
         onChange: () => window.location.reload()
     });
 
-    game.settings.register("resourceIcons", "user-borderShape", {
+    game.settings.register("resource-icons", "user-borderShape", {
         name: "Border Shape",
         hint: "",
         scope: "client",
@@ -32,7 +34,7 @@ Hooks.once("init", () => {
         onChange: async () => { for (let token of canvas.tokens.placeables) await token.drawResourceIcons() }
     });
 
-    game.settings.register("resourceIcons", "world-iconPosition", {
+    game.settings.register("resource-icons", "world-iconPosition", {
         name: "World Default: Icon Position",
         hint: "",
         scope: "world",
@@ -48,7 +50,7 @@ Hooks.once("init", () => {
         onChange: async () => window.location.reload()
     });
 
-    game.settings.register("resourceIcons", "user-iconPosition", {
+    game.settings.register("resource-icons", "user-iconPosition", {
         name: "Icon Position",
         hint: "",
         scope: "client",
@@ -68,7 +70,7 @@ Hooks.once("init", () => {
 
 Hooks.once("setup", () => {
     // GM function to toggle resource icon visibility
-    game.modules.get("resourceIcons").resourceIconVisibility = toggleResourceIcons;
+    game.modules.get("resource-icons").resourceIconVisibility = toggleResourceIcons;
     function toggleResourceIcons() {
         if (!game.user.isGM) return;
 
@@ -85,7 +87,7 @@ Hooks.once("setup", () => {
     }    
 
     // Patch Token draw method to include resource icon drawing
-    libWrapper.register("resourceIcons", "CONFIG.Token.objectClass.prototype.draw", newDraw, "WRAPPER");
+    libWrapper.register("resource-icons", "CONFIG.Token.objectClass.prototype.draw", newDraw, "WRAPPER");
     async function newDraw(wrapped, ...args) {
         // Call patched method
         const _this = await wrapped(...args);
@@ -102,7 +104,7 @@ Hooks.once("setup", () => {
     CONFIG.Token.objectClass.prototype.drawResourceIcons = drawResourceIcons;
     async function drawResourceIcons() {
         // Get Resource Icon flag data
-        const flagData = this.data.flags.resourceIcons;
+        const flagData = this.data.flags["resource-icons"];
         // If no flag data, return
         if (!flagData || !this.resourceIcons) return;
 
@@ -128,7 +130,7 @@ Hooks.once("setup", () => {
             if (!v.resource) continue;
 
             // Load resource icon image
-            const texture = await loadTexture(v.img || "modules/resourceIcons/icons/plain-circle.png");
+            const texture = await loadTexture(v.img || "modules/resource-icons/icons/plain-circle.png");
             // Create PIXI sprite using loaded image
             const icon = new PIXI.Sprite(texture);
             // Set sprite dimensions
@@ -178,7 +180,7 @@ Hooks.once("setup", () => {
     function updateResourceIconValues() {
         for (let icon of ["icon1", "icon2", "icon3"]) {
             // Get value of resource for current icon
-            const resourceValue = foundry.utils.getProperty(this.actor.data.data, this.data.flags.resourceIcons[icon].resource);
+            const resourceValue = foundry.utils.getProperty(this.actor.data.data, this.data.flags["resource-icons"][icon].resource);
             if (!resourceValue) continue;
             let value;
             if (Number.isFinite(resourceValue)) value = resourceValue;
@@ -190,10 +192,10 @@ Hooks.once("setup", () => {
     }
 
     // Patch _onUpdate method of Token class to re-draw resource icons or update resource icon values
-    libWrapper.register("resourceIcons", "CONFIG.Token.objectClass.prototype._onUpdate", new_onUpdate, "WRAPPER");
+    libWrapper.register("resource-icons", "CONFIG.Token.objectClass.prototype._onUpdate", new_onUpdate, "WRAPPER");
     function new_onUpdate(wrapped, data, options, userId) {
         wrapped(data, options, userId);
-        if (data.flags?.resourceIcons) this.drawResourceIcons();
+        if (data.flags?.["resource-icons"]) this.drawResourceIcons();
         else if (data.actorData) this.updateResourceIconValues();
     }
 });
@@ -202,7 +204,7 @@ Hooks.once("ready", () => {
     // Hook onto 'renderTokenConfig' to inject Resource Icon HTML
     Hooks.on("renderTokenConfig", async (app, html, data) => {
         // If current token has no Resource Icon flag data, render template using "blank" default data
-        if (!data.object.flags.resourceIcons) {
+        if (!data.object.flags["resource-icons"]) {
             const flagData = {};
             for (let i = 0; i < 3; i++) {
                 flagData[`icon${i + 1}`] = {
@@ -224,11 +226,11 @@ Hooks.once("ready", () => {
                     }
                 }
             }
-            data.object.flags.resourceIcons = flagData;
+            data.object.flags["resource-icons"] = flagData;
         }
         // Create array of numbers to render Resource Icon templates
-        data.resourceIcons = ["1", "2", "3"];
-        const snippet = await renderTemplate('modules/resourceIcons/templates/resourceIconsHTML.hbs', data);
+        data["resource-icons"] = ["1", "2", "3"];
+        const snippet = await renderTemplate('modules/resource-icons/templates/resource-icons-HTML.hbs', data);
         // Add rendered HTML to token-config application
         html.find(`.tab[data-tab="resources"`).append(snippet);
         // Activate listeners of new HTML elements (using Token class' parent class)
@@ -246,25 +248,25 @@ Hooks.once("ready", () => {
 });
 
 // Handlebars helpers that just call core counterparts 
-Handlebars.registerHelper('resourceIcons-select', (resource, options) => {
-    return HandlebarsHelpers.select(options.data.root.object.flags.resourceIcons[`icon${resource}`].resource, options);
+Handlebars.registerHelper('resource-icons-select', (resource, options) => {
+    return HandlebarsHelpers.select(options.data.root.object.flags["resource-icons"][`icon${resource}`].resource, options);
 });
 
-Handlebars.registerHelper('resourceIcons-filePicker', (options) => {
-    options.hash['target'] = `flags.resourceIcons.icon${options.hash['resource']}.img`;
+Handlebars.registerHelper('resource-icons-filePicker', (options) => {
+    options.hash['target'] = `flags.resource-icons.icon${options.hash['resource']}.img`;
     return HandlebarsHelpers.filePicker(options);
 });
 
-Handlebars.registerHelper('resourceIcons-colorPicker', (options) => {
+Handlebars.registerHelper('resource-icons-colorPicker', (options) => {
     const { resource, key } = options.hash;
-    options.hash['name'] = `flags.resourceIcons.icon${resource}.options.${key}.color`;
-    options.hash['value'] = options.data.root.object.flags.resourceIcons[`icon${resource}`].options[`${key}`].color;
+    options.hash['name'] = `flags.resource-icons.icon${resource}.options.${key}.color`;
+    options.hash['value'] = options.data.root.object.flags["resource-icons"][`icon${resource}`].options[`${key}`].color;
     return HandlebarsHelpers.colorPicker(options);
 });
 
 // Handlebars helper that facilitates getting data of current resource icon (in #each block of Resource Icons template)
-Handlebars.registerHelper('resourceIcons-getData', (resource, key, options) => {
-    let res = options.data.root.object.flags.resourceIcons[`icon${resource}`];
+Handlebars.registerHelper('resource-icons-getData', (resource, key, options) => {
+    let res = options.data.root.object.flags["resource-icons"][`icon${resource}`];
     const subKeys = key.split(".");
     subKeys.forEach(s => res = res[s]);
     return res || null;

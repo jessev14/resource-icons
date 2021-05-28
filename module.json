@@ -1,13 +1,13 @@
 {
-    "name": "resourceIcons",
+    "name": "resource-icons",
     "title": "Resource Icons",
-    "description": "",
+    "description": "Adds customizable icons to tokens that track actor resources.",
     "author": "enso#0361",
     "version": "1.0.0",
     "minimumCoreVersion": "0.8.1",
     "compatibleCoreVersion": "0.8.5",
     "esmodules": [
-        "scripts/resourceIcons.js"
+        "scripts/resource-icons.js"
     ],
     "languages": [
         {

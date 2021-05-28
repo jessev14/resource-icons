@@ -3,13 +3,13 @@
         <summary>
             Resource Icons
         </summary>
-        {{#each resourceIcons}}
+        {{#each resource-icons}}
         <div class="form-group">
             <div class="form-group">
                 <label>Icon {{this}}</label>
                 <div class="form-fields">
-                    <select name="flags.resourceIcons.icon{{this}}.resource">
-                        {{#resourceIcons-select this}}
+                    <select name="flags.resource-icons.icon{{this}}.resource">
+                        {{#resource-icons-select this}}
                         <option value="">None</option>
                         {{#each ../../barAttributes as |attrs label|}}
                         <optgroup label="{{ label }}">
@@ -18,7 +18,7 @@
                             {{/each}}
                         </optgroup>
                         {{/each}}
-                        {{/resourceIcons-select}}
+                        {{/resource-icons-select}}
                     </select>
                 </div>
             </div>
@@ -27,9 +27,9 @@
         <div class="form-group">
             <label>Icon {{this}} Image</label>
             <div class="form-fields">
-                {{resourceIcons-filePicker resource=this type="imagevideo"}}
-                <input class="image" type="text" name="flags.resourceIcons.icon{{this}}.img" placeholder="path/image.png"
-                    value="{{resourceIcons-getData this "img"}}" />
+                {{resource-icons-filePicker resource=this type="imagevideo"}}
+                <input class="image" type="text" name="flags.resource-icons.icon{{this}}.img" placeholder="path/image.png"
+                    value="{{resource-icons-getData this "img"}}" />
             </div>
         </div>
 
@@ -42,36 +42,36 @@
                 <div class="form-group">
                     <label for="icon1-background">Background</label>
                     <input id="icon{{this}}-background" type="checkbox"
-                        name="flags.resourceIcons.icon{{this}}.options.background.active" {{checked
-                        (resourceIcons-getData this "options.background.active")}} />
+                        name="flags.resource-icons.icon{{this}}.options.background.active" {{checked
+                        (resource-icons-getData this "options.background.active")}} />
                 </div>
 
 
                 <div class="form-group">
                     <label>Background Color</label>
-                    {{resourceIcons-colorPicker resource=this key="background"}}
+                    {{resource-icons-colorPicker resource=this key="background"}}
                 </div>
 
                 <div class="form-group">
                     <label for="icon{{this}}-border">Border</label>
-                    <input id="icon{{this}}-border" type="checkbox" name="flags.resourceIcons.icon{{this}}.options.border.active"
-                        {{checked (resourceIcons-getData this "options.border.active")}} />
+                    <input id="icon{{this}}-border" type="checkbox" name="flags.resource-icons.icon{{this}}.options.border.active"
+                        {{checked (resource-icons-getData this "options.border.active")}} />
                 </div>
 
                 <div class="form-group">
                     <label>Border Color</label>
-                    {{resourceIcons-colorPicker resource=this key="border"}}
+                    {{resource-icons-colorPicker resource=this key="border"}}
                 </div>
 
                 <div class="form-group">
                     <label for="icon{{this}}-tint">Image Tint</label>
-                    <input id="icon{{this}}-tint" type="checkbox" name="flags.resourceIcons.icon{{this}}.options.tint.active"
-                        {{checked (resourceIcons-getData this "options.tint.active")}} />
+                    <input id="icon{{this}}-tint" type="checkbox" name="flags.resource-icons.icon{{this}}.options.tint.active"
+                        {{checked (resource-icons-getData this "options.tint.active")}} />
                 </div>
 
                 <div class="form-group">
                     <label>Image Tint Color</label>
-                    {{resourceIcons-colorPicker resource=this key="tint"}}
+                    {{resource-icons-colorPicker resource=this key="tint"}}
                 </div>
 
             </details>

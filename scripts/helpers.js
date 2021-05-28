@@ -1,6 +1,6 @@
 export function getSetting(key) {
-    let userSetting = game.settings.get("resourceIcons", `user-${key}`);
-    if (userSetting === "worldDefault") userSetting = game.settings.get("resourceIcons", `world-${key}`);
+    let userSetting = game.settings.get("resource-icons", `user-${key}`);
+    if (userSetting === "worldDefault") userSetting = game.settings.get("resource-icons", `world-${key}`);
 
     return userSetting;
 }
