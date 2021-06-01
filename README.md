@@ -22,6 +22,9 @@ The border, background, and tint of each icon can be individually set.
 
 The border shape (circle/square) and where the resource icons are anchored (above/below/left of/right of token) can be changed in the module settings (per user with an option to use world default set by GM).
 
+## Future Implementations
+* Allow icons to be set to display only on hover.
+
 ## Technical Notes
 
 Resource Icons patches (via lib-wrapper) `CONFIG.Token.objectClass.prototype.draw` to implement resource icon drawing. This drawing is handled by a new method added to the Token object class: `drawResourceIcons`. This method adds three PIXI container children to the token. Each of these PIXI containers themselves are assigned three PIXI children (based on resource icon configuration): background (which encompasses border), icon image, and value text.
