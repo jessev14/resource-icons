@@ -178,6 +178,7 @@ Hooks.once("setup", () => {
     // Create new method in Token class to update resouce icon values
     CONFIG.Token.objectClass.prototype.updateResourceIconValues = updateResourceIconValues;
     function updateResourceIconValues() {
+        if (!this.data.flags["resource-icons"]) return;
         for (let icon of ["icon1", "icon2", "icon3"]) {
             // Get value of resource for current icon
             const resourceValue = foundry.utils.getProperty(this.actor.data.data, this.data.flags["resource-icons"][icon].resource);
