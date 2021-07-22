@@ -3,9 +3,9 @@
     "title": "Resource Icons",
     "description": "Adds customizable icons to tokens that track actor resources.",
     "author": "enso#0361",
-    "version": "1.0.0",
+    "version": "1.1.6",
     "minimumCoreVersion": "0.8.1",
-    "compatibleCoreVersion": "0.8.6",
+    "compatibleCoreVersion": "0.8.8",
     "esmodules": [
         "scripts/resource-icons.js"
     ],
@@ -17,6 +17,6 @@
         }
     ],
     "url": "https://github.com/jessev14/resource-icons",
-    "manifest": "https://github.com/resource-icons/releases/latest/download/module.json",
-    "download": "https://github.com/resource-icons/releases/download/1.0.0/RI.zip"
+    "manifest": "https://github.com/jessev14/resource-icons/releases/latest/download/module.json",
+    "download": "https://github.com/jessev14/resource-icons/releases/download/1.1.6/RI.zip"
 }

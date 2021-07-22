@@ -1,7 +1,6 @@
-// flags.resource_icons works
-
-import { containerPosition, getSetting } from './helpers.js';
 import { libWrapper } from '../lib/shim.js';
+import { containerPosition, getSetting } from './helpers.js';
+
 
 Hooks.once("init", () => {
     // Register module settings
@@ -66,6 +65,35 @@ Hooks.once("init", () => {
         default: "worldDefault",
         onChange: async () => { for (let token of canvas.tokens.placeables) await token.drawResourceIcons() }
     });
+
+    game.settings.register("resource-icons", "world-iconAlignment", {
+        name: "World Default: Icon Alignment",
+        hint: "",
+        scope: "world",
+        config: true,
+        type: String,
+        choices: {
+            outside: "Outside Token",
+            inside: "Inside Token"
+        },
+        default: "outside",
+        onChange: async () => window.location.reload()
+    });
+
+    game.settings.register("resource-icons", "user-iconAlignment", {
+        name: "Icon Alignment",
+        hint: "",
+        scope: "client",
+        config: true,
+        type: String,
+        choices: {
+            worldDefault: "World Default",
+            outside: "Outside Token",
+            inside: "Inside Token"
+        },
+        default: "worldDefault",
+        onChange: async () => { for (let token of canvas.tokens.placeables) await token.drawResourceIcons() }
+    });
 });
 
 Hooks.once("setup", () => {
@@ -98,6 +126,15 @@ Hooks.once("setup", () => {
         _this.drawResourceIcons();
 
         return _this;
+    }
+
+    // Patch Token refresh method to implement hover/control rendering for icons
+    libWrapper.register("resource-icons", "CONFIG.Token.objectClass.prototype.refresh", newRefresh, "WRAPPER");
+    function newRefresh(wrapped, ...args) {
+        wrapped(...args);
+
+        if (this.resourceIcons) this.resourceIcons.visible = this._canViewMode(this.data.flags["resource-icons"].displayIcons);
+        return this;
     }
 
     // Create new method in Token class to draw resource icons
@@ -162,6 +199,13 @@ Hooks.once("setup", () => {
             // Adjust font size linearly based on grid size
             if (canvas.dimensions.size < 101) style.fontSize = (10 / 50) * canvas.dimensions.size;
             else if (canvas.dimensions.size > 100) style.fontSize = 12 + (8 / 100) * canvas.dimensions.size;
+
+            // If the token height and width in grid units > 1, scale font based on largest value
+            if (this.data.height > 1 || this.data.width > 1) {
+                const bigger = Math.max(this.data.height, this.data.width);
+                style.fontSize = style.fontSize * bigger;
+            }
+
             // Create PIXI text
             const text = new PreciseText(`${value}`, style);
             // Set PIXI text anchor and position
@@ -182,7 +226,7 @@ Hooks.once("setup", () => {
         for (let icon of ["icon1", "icon2", "icon3"]) {
             // Get value of resource for current icon
             const resourceValue = foundry.utils.getProperty(this.actor.data.data, this.data.flags["resource-icons"][icon].resource);
-            if (resourceValue == null) continue;
+            if (!resourceValue) continue;
             let value;
             if (Number.isFinite(resourceValue)) value = resourceValue;
             else if ("value" in resourceValue) value = resourceValue.value || 0;
@@ -247,6 +291,7 @@ Hooks.once("ready", () => {
         }
     });
 });
+
 
 // Handlebars helpers that just call core counterparts 
 Handlebars.registerHelper('resource-icons-select', (resource, options) => {
