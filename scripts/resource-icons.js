@@ -133,7 +133,7 @@ Hooks.once("setup", () => {
     function newRefresh(wrapped, ...args) {
         wrapped(...args);
 
-        if (this.resourceIcons) this.resourceIcons.visible = this._canViewMode(this.data.flags["resource-icons"].displayIcons);
+        if (this.resourceIcons && this.data.flags["resource-icons"]?.displayIcons) this.resourceIcons.visible = this._canViewMode(this.data.flags["resource-icons"].displayIcons);
         return this;
     }
 
