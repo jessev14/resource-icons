@@ -141,9 +141,14 @@ Hooks.once("setup", () => {
     CONFIG.Token.objectClass.prototype.drawResourceIcons = drawResourceIcons;
     async function drawResourceIcons() {
         // Get Resource Icon flag data
-        const flagData = this.data.flags["resource-icons"];
+        const flagData = {};
+        for (const [key, value] of Object.entries(this.data.flags["resource-icons"])) {
+            if (!key.includes("icon")) continue;
+
+            flagData[key] = value;
+        }
         // If no flag data, return
-        if (!flagData || !this.resourceIcons) return;
+        if (!flagData.icon1 || !this.resourceIcons) return;
 
         // Delete pre-existing resource icons to prepare blank slate for drawing
         this.resourceIcons.removeChildren().forEach(c => c.destroy({ children: true }));
