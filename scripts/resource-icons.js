@@ -140,6 +140,8 @@ Hooks.once("setup", () => {
     // Create new method in Token class to draw resource icons
     CONFIG.Token.objectClass.prototype.drawResourceIcons = drawResourceIcons;
     async function drawResourceIcons() {
+        if (!this.data.flags["resource-icons"]) return;
+        
         // Get Resource Icon flag data
         const flagData = {};
         for (const [key, value] of Object.entries(this.data.flags["resource-icons"])) {
