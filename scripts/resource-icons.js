@@ -94,6 +94,16 @@ Hooks.once("init", () => {
         default: "worldDefault",
         onChange: async () => { for (let token of canvas.tokens.placeables) await token.drawResourceIcons() }
     });
+
+    game.settings.register("resource-icons", "scaleToToken", {
+        name: "Scale Resource Icons with Token Size",
+        hint: "",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: true,
+        onChange: () => window.location.reload()
+    });
 });
 
 Hooks.once("setup", () => {
@@ -112,7 +122,7 @@ Hooks.once("setup", () => {
 
         for (let token of canvas.tokens.placeables) token.resourceIcons.visible = !currentVisibility;
         return !currentVisibility;
-    }    
+    }
 
     // Patch Token draw method to include resource icon drawing
     libWrapper.register("resource-icons", "CONFIG.Token.objectClass.prototype.draw", newDraw, "WRAPPER");
@@ -141,7 +151,7 @@ Hooks.once("setup", () => {
     CONFIG.Token.objectClass.prototype.drawResourceIcons = drawResourceIcons;
     async function drawResourceIcons() {
         if (!this.data.flags["resource-icons"]) return;
-        
+
         // Get Resource Icon flag data
         const flagData = {};
         for (const [key, value] of Object.entries(this.data.flags["resource-icons"])) {
@@ -178,7 +188,8 @@ Hooks.once("setup", () => {
             // Create PIXI sprite using loaded image
             const icon = new PIXI.Sprite(texture);
             // Set sprite dimensions
-            icon.width = icon.height = 0.28 * Math.min(this.w, this.h);
+            if (game.settings.get("resource-icons", "scaleToToken")) icon.width = icon.height = 0.28 * Math.min(this.w, this.h);
+            else icon.width = icon.height = 0.28 * canvas.grid.w;
             // Set sprite anchor and and position
             icon.anchor.set(0);
             icon.position.set(0);
@@ -208,9 +219,11 @@ Hooks.once("setup", () => {
             else if (canvas.dimensions.size > 100) style.fontSize = 12 + (8 / 100) * canvas.dimensions.size;
 
             // If the token height and width in grid units > 1, scale font based on largest value
-            if (this.data.height > 1 || this.data.width > 1) {
-                const bigger = Math.max(this.data.height, this.data.width);
-                style.fontSize = style.fontSize * bigger;
+            if (game.settings.get("resource-icons", "scaleToToken")) {
+                if (this.data.height > 1 || this.data.width > 1) {
+                    const bigger = Math.max(this.data.height, this.data.width);
+                    style.fontSize = style.fontSize * bigger;
+                }
             }
 
             // Create PIXI text

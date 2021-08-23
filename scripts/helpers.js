@@ -7,7 +7,10 @@ export function getSetting(key) {
 
 export function containerPosition(currentIconIndex, tokenWidth, tokenHeight) {
     // Icon size based on pixel size of token
-    const iconSize = 0.28 * Math.min(tokenWidth, tokenHeight);
+    let iconSize;
+    if (game.settings.get("resource-icons", "scaleToToken")) iconSize = 0.28 * Math.min(tokenWidth, tokenHeight);
+    else iconSize = 0.28 * canvas.grid.w;
+
     // Icon position based on iconPosition module setting
     const iconPosition = getSetting("iconPosition");
     const iconAlignment = getSetting("iconAlignment");
@@ -15,8 +18,10 @@ export function containerPosition(currentIconIndex, tokenWidth, tokenHeight) {
     let x, y;
     // If icons are above/below token, static vertical (y) offset but dynamic horizontal offset (x) based on current icon
     if (iconPosition === "above" || iconPosition === "below") {
+        let xArray;
         const x0 = (tokenWidth - 3 * iconSize) / 2; // horizontal space between icons
-        const xArray = [0, iconSize + x0, 2 * (iconSize + x0)]; // left-end start points of icons
+        if (game.settings.get("resource-icons", "scaleToToken")) xArray = [0, iconSize + x0, 2 * (iconSize + x0)]; // left-end start points of icons
+        else xArray = [Math.max(0, tokenWidth/2 - iconSize*2.25), tokenWidth/2 - iconSize/2, Math.min(tokenWidth - iconSize, tokenWidth/2 + iconSize*1.25)];
         x = xArray[currentIconIndex];
 
         y = iconPosition === "above"
@@ -30,7 +35,9 @@ export function containerPosition(currentIconIndex, tokenWidth, tokenHeight) {
             : (iconAlignment === "outside" ? tokenWidth + 4 : tokenWidth - iconSize);
 
         const y0 = (tokenHeight - 3 * iconSize) / 2; // vertical space between icons
-        const yArray = [0, iconSize + y0, 2 * (iconSize + y0)] // top-side start points of icons
+        let yArray;
+        if (game.settings.get("resource-icons", "scaleToToken")) yArray = [0, iconSize + y0, 2 * (iconSize + y0)] // top-side start points of icons
+        else yArray = [Math.max(0, tokenHeight/2 - iconSize*2.25), tokenHeight/2 - iconSize/2, Math.min(tokenHeight - iconSize, tokenHeight/2 + iconSize*1.25)];
         y = yArray[currentIconIndex];
     }
 
