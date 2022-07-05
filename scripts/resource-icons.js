@@ -104,6 +104,15 @@ Hooks.once("init", () => {
         default: true,
         onChange: () => window.location.reload()
     });
+
+    game.settings.register("resource-icons", "hideZero", {
+        name: "Hide Icon when Resource is Zero",
+        scope: "world",
+        config: true,
+        type: Boolean,
+        default: false,
+        onChange: async () => window.location.reload()
+    });
 });
 
 Hooks.once("setup", () => {
@@ -253,6 +262,8 @@ Hooks.once("setup", () => {
             else value = null;
             // Update current icon text to reflect new value
             this.resourceIcons[icon].value.text = value;
+            if (!value) this.resourceIcons[icon].alpha = 0;
+            else this.resourceIcons[icon].alpha = 1;
         }
     }
 
