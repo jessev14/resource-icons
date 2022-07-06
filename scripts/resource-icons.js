@@ -262,7 +262,7 @@ Hooks.once("setup", () => {
             else value = null;
             // Update current icon text to reflect new value
             this.resourceIcons[icon].value.text = value;
-            if (!value) this.resourceIcons[icon].alpha = 0;
+            if (!value && game.settings.get("resource-icons", "hideZero")) this.resourceIcons[icon].alpha = 0;
             else this.resourceIcons[icon].alpha = 1;
         }
     }
