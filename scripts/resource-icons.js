@@ -255,7 +255,7 @@ Hooks.once("setup", () => {
         for (let icon of ["icon1", "icon2", "icon3"]) {
             // Get value of resource for current icon
             const resourceValue = foundry.utils.getProperty(this.actor.data.data, this.data.flags["resource-icons"][icon].resource);
-            if (!resourceValue) continue;
+            if (resourceValue === null || resourceValue === undefined) continue;
             let value;
             if (Number.isFinite(resourceValue)) value = resourceValue;
             else if ("value" in resourceValue) value = resourceValue.value || 0;
