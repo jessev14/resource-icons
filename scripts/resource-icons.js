@@ -245,6 +245,8 @@ Hooks.once("setup", () => {
             this.resourceIcons[k].background = this.resourceIcons[k].addChild(bg);
             this.resourceIcons[k].img = this.resourceIcons[k].addChild(icon);
             this.resourceIcons[k].value = this.resourceIcons[k].addChild(text);
+
+            if (!value && game.settings.get("resource-icons", "hideZero")) this.resourceIcons[k].alpha = 0;
         }
     }
 
