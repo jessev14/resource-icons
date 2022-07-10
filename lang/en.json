@@ -1,5 +1,18 @@
 {
     "resource-icons": {
-        
+        "settings": {
+            "combatOnly": {
+                "name": "Display Icons Only During Combat"
+            },
+            "iconAnchor": {
+                "name": "Display Icons on Which Side of Tokens",
+                "choices": {
+                    "top": "Top",
+                    "bottom": "Bottom",
+                    "left": "Left",
+                    "right": "Right"
+                }
+            }
+        }
     }
 }
