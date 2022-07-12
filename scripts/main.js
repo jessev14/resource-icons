@@ -1,4 +1,4 @@
-// import { libWrapper } from "../lib/shim.js";
+import { libWrapper } from "../lib/shim.js";
 import { containerPosition } from "./helpers.js";
 import { ResourceIconConfig } from "./ResourceIconConfig.js";
 
