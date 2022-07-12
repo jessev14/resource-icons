@@ -105,7 +105,7 @@ Hooks.on("renderTokenConfig", (app, html, data) => {
 });
 
 Hooks.on("updateActor", (actor, diff, options, userID) => {
-    if (!diff.system) return;
+    if (!diff.data) return;
     
     const tokens = actor.getActiveTokens();
     for (const token of tokens) token.updateResourceIconValues();
@@ -157,7 +157,7 @@ async function drawResourceIcons() {
         else bg.drawRoundedRect(icon.position.x - 1, icon.position.y - 1, icon.width + 2, icon.height + 2, 2);
 
         // Value
-        const resource = foundry.utils.getProperty(this.actor.system, v.resource);
+        const resource = foundry.utils.getProperty(this.actor.data.data, v.resource);
         let value;
         if (Number.isFinite(resource)) value = resource;
         else if ("value" in resource) value = resource.value || 0;
@@ -187,7 +187,7 @@ async function drawResourceIcons() {
 
 function updateResourceIconValues() {
     for (const [k, v] of Object.entries(this.document.getFlag(moduleName, "iconData"))) {
-        const resource = foundry.utils.getProperty(this.actor.system, v.resource);
+        const resource = foundry.utils.getProperty(this.actor.data.data, v.resource);
         if (resource === null || resource === undefined) continue;
         let value;
         if (Number.isFinite(resource)) value = resource;
