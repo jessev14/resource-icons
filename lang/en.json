@@ -12,6 +12,16 @@
                     "left": "Left",
                     "right": "Right"
                 }
+            },
+            "boundingBox": {
+                "name": "Display Icons Inside/Outside Token Bounding Box",
+                "choices": {
+                    "outside": "Outside",
+                    "inside": "Inside"
+                }
+            },
+            "hideZero": {
+                "name": "Hide Icon when Value is 0"
             }
         }
     }
