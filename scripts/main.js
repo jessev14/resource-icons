@@ -62,7 +62,7 @@ Hooks.once("init", () => {
 
     // Patch Token methods
     // Add resource icon drawing to Token#_draw
-    libWrapper.register(moduleName, "CONFIG.Token.objectClass.prototype._draw", _drawPatch, "WRAPPER");
+    libWrapper.register(moduleName, "CONFIG.Token.objectClass.prototype.draw", _drawPatch, "WRAPPER");
 
     // Add visibility control of resource icons to Token#refresh
     libWrapper.register(moduleName, "CONFIG.Token.objectClass.prototype.refresh", refreshPatch, "WRAPPER");
@@ -124,7 +124,7 @@ async function drawResourceIcons() {
     if (game.settings.get(moduleName, "combatOnly") && !this.combatant) return;
 
     const iconData = this.document.getFlag(moduleName, "iconData");
-    if (!Object.values(iconData).length) return;
+    if (!iconData || !Object.values(iconData).length) return;
 
     this.resourceIcons.removeChildren().forEach(c => c.destroy({ children: true }));
     
@@ -147,12 +147,12 @@ async function drawResourceIcons() {
         icon.width = icon.height = 0.28 * Math.min(this.w, this.h);
         icon.anchor.set(0);
         icon.position.set(0);
-        if (v.tint) icon.tint = foundry.utils.Color.from(v.tint) || 0x000000;
+        if (v.tint) icon.tint = colorStringToHex(v.tint) || 0x000000;
 
         // Background
         const bg = new PIXI.Graphics();
-        if (v.bg) bg.beginFill(foundry.utils.Color.from(v.background) || 0x000000);
-        if (v.border) bg.lineStyle(1.0, foundry.utils.Color.from(v.border) || 0x000000);
+        if (v.background) bg.beginFill(colorStringToHex(v.background) || 0x000000, 0.4);
+        if (v.border) bg.lineStyle(1.0, colorStringToHex(v.border) || 0x000000);
         if (v.shape === "circle") bg.drawCircle(icon.width / 2, icon.height / 2, icon.width / 2 + 1);
         else bg.drawRoundedRect(icon.position.x - 1, icon.position.y - 1, icon.width + 2, icon.height + 2, 2);
 
@@ -203,13 +203,18 @@ async function _drawPatch(wrapper) {
 
     this.resourceIcons = this.addChild(new PIXI.Container());
     this.drawResourceIcons();
+
+    return this;
 }
 
 function refreshPatch(wrapper) {
     wrapper();
+    if (!this.resourceIcons) return this;
 
     if (game.settings.get(moduleName, "combatOnly") && !this.combatant) this.resourceIcons.visible = false;
     else this.resourceIcons.visible = this._canViewMode(this.document.getFlag(moduleName, "displayIcons") ?? 40);
+    
+    return this;
 }
 
 function _onUpdatePatch(wrapper, data, options, userID) {

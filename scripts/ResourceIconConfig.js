@@ -26,7 +26,7 @@ export class ResourceIconConfig extends FormApplication {
     getData() {
         const data = {};
 
-        let iconData = this.object.flags[moduleName]?.iconData;
+        let iconData = this.object.data.flags?.[moduleName]?.iconData;
         if (!iconData) {
             const empty = {
                 resource: "",
@@ -52,8 +52,8 @@ export class ResourceIconConfig extends FormApplication {
     }
 
     async _updateObject(event, formData) {
-        const isPrototype = this.object instanceof foundry.data.PrototypeToken;
-        if (isPrototype) return this.object.actor.update({ prototypeToken: formData });
+        const isPrototype = this.object instanceof Actor;
+        if (isPrototype) return this.object.update({ token: formData });
 
         await this.object.update(formData);
         await this.object.object.drawResourceIcons();
