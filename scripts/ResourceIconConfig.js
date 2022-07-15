@@ -44,10 +44,10 @@ export class ResourceIconConfig extends FormApplication {
         }
         data.iconData = iconData;
 
-        const attributes = TokenDocument.getTrackedAttributes();
-        const resourceChoices = TokenDocument.getTrackedAttributeChoices(attributes);
+        const attributes = TokenDocument.implementation.getTrackedAttributes(this.object.actor?.data.data ?? {});
+        const resourceChoices = TokenDocument.implementation.getTrackedAttributeChoices(attributes);
         data.resourceChoices = resourceChoices;
-
+        
         return data;
     }
 
