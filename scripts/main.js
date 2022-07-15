@@ -82,12 +82,13 @@ Hooks.once("init", () => {
 
 
 Hooks.on("renderTokenConfig", (app, html, data) => {
+    const isPrototype = app.object instanceof Actor;
     const displayIcons = document.createElement(`div`);
     displayIcons.classList.add("form-group");
     displayIcons.innerHTML = `
         <label>Resource Icons</label>
         <div class="form-fields">
-            <select name="flags.${moduleName}.displayIcons" data-dtype="Number">
+            <select name="${isPrototype ? "token." : ""}flags.${moduleName}.displayIcons" data-dtype="Number">
                 ${Handlebars.helpers.selectOptions.call(
                     this,
                     Object.entries(CONST.TOKEN_DISPLAY_MODES).reduce((obj, e) => {
@@ -95,7 +96,7 @@ Hooks.on("renderTokenConfig", (app, html, data) => {
                         return obj;
                     }, {}),
                     { hash: {
-                        selected: app.object.getFlag(moduleName, "displayIcons")
+                        selected: isPrototype ? app.object.data.token.flags[moduleName].displayIcons : app.object.getFlag(moduleName, "displayIcons")
                     }}
                 )}
             </select>
@@ -167,6 +168,8 @@ async function drawResourceIcons() {
 
         // Value
         const resource = foundry.utils.getProperty(this.actor.data.data, v.resource);
+        if (resource === undefined || resource === null) continue;
+
         let value;
         if (Number.isFinite(resource)) value = resource;
         else if ("value" in resource) value = resource.value || 0;

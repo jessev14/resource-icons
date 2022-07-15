@@ -25,9 +25,11 @@ export class ResourceIconConfig extends FormApplication {
     }
 
     getData() {
+        const isPrototype = this.object instanceof Actor;
+        const objectData = isPrototype ? this.object.data.token : this.object.data;
         const data = {};
 
-        let iconData = this.object.data.flags?.[moduleName]?.iconData;
+        let iconData = objectData.flags?.[moduleName]?.iconData;
         if (!iconData) {
             const empty = {
                 resource: "",
@@ -45,7 +47,7 @@ export class ResourceIconConfig extends FormApplication {
         }
         data.iconData = iconData;
 
-        const attributes = TokenDocument.implementation.getTrackedAttributes(this.object.actor?.data.data ?? {});
+        const attributes = TokenDocument.implementation.getTrackedAttributes((isPrototype ? this.object.data.data : this.object.actor.data.data ) ?? {});
         const resourceChoices = TokenDocument.implementation.getTrackedAttributeChoices(attributes);
         data.resourceChoices = resourceChoices;
 
