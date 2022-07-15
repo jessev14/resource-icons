@@ -37,8 +37,8 @@ Hooks.once("init", () => {
         scope: "world",
         type: String,
         choices: {
-            outside: `${moduleName}.settings.iconAnchor.choices.outside`,
-            inside: `${moduleName}.settings.iconAnchor.choices.inside`,
+            outside: `${moduleName}.settings.boundingBox.choices.outside`,
+            inside: `${moduleName}.settings.boundingBox.choices.inside`,
         },
         default: "outside",
         onChange: () => canvas.tokens.placeables.forEach(t => t.drawResourceIcons())
@@ -51,6 +51,15 @@ Hooks.once("init", () => {
         type: Boolean,
         default: false,
         onChange: () => canvas.tokens.placeables.forEach(t => t.drawResourceIcons())
+    });
+
+    game.settings.register(moduleName, "expertMode", {
+        name: "Export Mode",
+        hint: "Enabling this mode allows users to enter in a resource data path instead of using a dropdown.",
+        config: true,
+        scope: "client",
+        type: Boolean,
+        default: false
     });
 
     // New Token methods

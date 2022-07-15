@@ -11,7 +11,8 @@ export class ResourceIconConfig extends FormApplication {
             template: `modules/${moduleName}/templates/resource-icon-config.hbs`,
             tabs: [
                 { navSelector: '.tabs[data-group="main"]', contentSelector: "form", initial: "icon1" }
-            ]
+            ],
+            resizable: true
         });
     }
 
@@ -47,6 +48,8 @@ export class ResourceIconConfig extends FormApplication {
         const attributes = TokenDocument.implementation.getTrackedAttributes(this.object.actor?.data.data ?? {});
         const resourceChoices = TokenDocument.implementation.getTrackedAttributeChoices(attributes);
         data.resourceChoices = resourceChoices;
+
+        data.expertMode = game.settings.get(moduleName, "expertMode");
         
         return data;
     }

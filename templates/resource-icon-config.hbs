@@ -8,74 +8,80 @@
 
     {{#each iconData as |icon key|}}
     <div class="tab" data-group="main" data-tab="{{key}}">
-            <div class="form-group">
+        <div class="form-group">
             <label>Resource</label>
-                <div class="form-fields">
-                    <select class="bar-attribute" name="flags.resource-icons.iconData.{{key}}.resource">
-                        {{#select icon.resource}}
-                        <option value="">{{ localize "None" }}</option>
-                        {{#each ../resourceChoices as |attrs label|}}
-                        <optgroup label="{{ label }}">
-                            {{#each attrs}}
-                            <option value="{{this}}">{{this}}</option>
-                            {{/each}}
-                        </optgroup>
+            <div class="form-fields">
+                {{#if ../expertMode}}
+                    <input type="text" name="flags.resource-icons.iconData.{{key}}.resource" value="{{icon.resource}}" placeholder="resource data path" />
+                {{else}}
+                <select class="bar-attribute" name="flags.resource-icons.iconData.{{key}}.resource">
+                    {{#select icon.resource}}
+                    <option value="">{{ localize "None" }}</option>
+                    {{#each ../resourceChoices as |attrs label|}}
+                    <optgroup label="{{ label }}">
+                        {{#each attrs}}
+                        <option value="{{this}}">{{this}}</option>
                         {{/each}}
-                        {{/select}}
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Icon</label>
-                <div class="form-fields">
-                    <button type="button" class="file-picker" data-type="imagevideo"
-                        data-target="flags.resource-icons.iconData.{{key}}.img" title="Browse Files" tabindex="-1">
-                        <i class="fas fa-file-import fa-fw"></i>
-                    </button>
-                    <input class="image" type="text" name="flags.resource-icons.iconData.{{key}}.img"
-                        placeholder="path/image.png" value="{{icon.img}}">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Tint Color</label>
-                <div class="form-fields">
-                    <input class="color" type="text" name="flags.resource-icons.iconData.{{key}}.tint" value="{{icon.tint}}">
-                    <input type="color" value="{{icon.tint}}" data-edit="flags.resource-icons.iconData.{{key}}.tint">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Background Color</label>
-                <div class="form-fields">
-                    <input class="color" type="text" name="flags.resource-icons.iconData.{{key}}.background" value="{{icon.background}}">
-                    <input type="color" value="{{icon.background}}"
-                        data-edit="flags.resource-icons.iconData.{{key}}.background">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Border Color</label>
-                <div class="form-fields">
-                    <input class="color" type="text" name="flags.resource-icons.iconData.{{key}}.border" value="{{icon.border}}">
-                    <input type="color" value="{{icon.border}}"
-                        data-edit="flags.resource-icons.iconData.{{key}}.border">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Shape</label>
-                <div class="form-fields">
-                    <select class="bar-attribute" name="flags.resource-icons.iconData.{{key}}.shape">
-                        {{#select icon.shape}}
-                        <option value="circle">Circle</option>
-                        <option value="square">Square</option>
-                        {{/select}}
-                    </select>
-                </div>
+                    </optgroup>
+                    {{/each}}
+                    {{/select}}
+                </select>
+                {{/if}}
             </div>
         </div>
+
+        <div class="form-group">
+            <label>Icon</label>
+            <div class="form-fields">
+                <button type="button" class="file-picker" data-type="imagevideo"
+                    data-target="flags.resource-icons.iconData.{{key}}.img" title="Browse Files" tabindex="-1">
+                    <i class="fas fa-file-import fa-fw"></i>
+                </button>
+                <input class="image" type="text" name="flags.resource-icons.iconData.{{key}}.img"
+                    placeholder="path/image.png" value="{{icon.img}}">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Tint Color</label>
+            <div class="form-fields">
+                <input class="color" type="text" name="flags.resource-icons.iconData.{{key}}.tint"
+                    value="{{icon.tint}}">
+                <input type="color" value="{{icon.tint}}" data-edit="flags.resource-icons.iconData.{{key}}.tint">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Background Color</label>
+            <div class="form-fields">
+                <input class="color" type="text" name="flags.resource-icons.iconData.{{key}}.background"
+                    value="{{icon.background}}">
+                <input type="color" value="{{icon.background}}"
+                    data-edit="flags.resource-icons.iconData.{{key}}.background">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Border Color</label>
+            <div class="form-fields">
+                <input class="color" type="text" name="flags.resource-icons.iconData.{{key}}.border"
+                    value="{{icon.border}}">
+                <input type="color" value="{{icon.border}}" data-edit="flags.resource-icons.iconData.{{key}}.border">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Shape</label>
+            <div class="form-fields">
+                <select class="bar-attribute" name="flags.resource-icons.iconData.{{key}}.shape">
+                    {{#select icon.shape}}
+                    <option value="circle">Circle</option>
+                    <option value="square">Square</option>
+                    {{/select}}
+                </select>
+            </div>
+        </div>
+    </div>
     </div>
     {{/each}}
 
