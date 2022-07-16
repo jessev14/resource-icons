@@ -1,11 +1,20 @@
 import { libWrapper } from "../lib/shim.js";
 import { containerPosition } from "./helpers.js";
 import { ResourceIconConfig } from "./ResourceIconConfig.js";
+import { ActorTypeSelector } from "./ActorSelector.js";
 
 export const moduleName = "resource-icons";
 
 
 Hooks.once("init", () => {
+    // Register module submenus
+    game.settings.registerMenu(moduleName, "actorTypeDefaultsSubmenu", {
+        name: "Actor Defaults",
+        label: "Set Defaults",
+        restricted: true,
+        type: ActorTypeSelector
+    });
+
     // Register module settings
     game.settings.register(moduleName, "combatOnly", {
         name: `${moduleName}.settings.combatOnly.name`,
@@ -62,6 +71,11 @@ Hooks.once("init", () => {
         default: false
     });
 
+    game.settings.register(moduleName, "actorTypeDefaults", {
+        type: Object,
+        default: {}
+    });
+
     // New Token methods
     // Draw resource icons
     CONFIG.Token.objectClass.prototype.drawResourceIcons = drawResourceIcons;
@@ -88,18 +102,6 @@ Hooks.on("renderTokenConfig", (app, html, data) => {
     displayIcons.innerHTML = `
         <label>Resource Icons</label>
         <div class="form-fields">
-            <select name="${isPrototype ? "token." : ""}flags.${moduleName}.displayIcons" data-dtype="Number">
-                ${Handlebars.helpers.selectOptions.call(
-                    this,
-                    Object.entries(CONST.TOKEN_DISPLAY_MODES).reduce((obj, e) => {
-                        obj[e[1]] = game.i18n.localize(`TOKEN.DISPLAY_${e[0]}`);
-                        return obj;
-                    }, {}),
-                    { hash: {
-                        selected: isPrototype ? app.object.data.token.flags[moduleName].displayIcons : app.object.getFlag(moduleName, "displayIcons")
-                    }}
-                )}
-            </select>
         </div>
     `;
 
@@ -112,6 +114,16 @@ Hooks.on("renderTokenConfig", (app, html, data) => {
     html[0].querySelector(`div.tab[data-tab="resources"]`).append(displayIcons);
 
     ui.activeWindow.setPosition({height: "auto"});
+});
+
+Hooks.on("preCreateActor", (actor, data, options, userID) => {
+    const actorType = data.type;
+    const actorTypeDefaultData = game.settings.get(moduleName, "actorTypeDefaults")?.[actorType];
+
+    return actor.data.update({
+        [`token.flags.${moduleName}.displayIcons`]: actorTypeDefaultData.displayIcons ?? 0,
+        [`token.flags.${moduleName}.iconData`]: actorTypeDefaultData.iconData ?? {}
+    });
 });
 
 Hooks.on("updateActor", (actor, diff, options, userID) => {
@@ -195,6 +207,8 @@ async function drawResourceIcons() {
 
         if (!value && game.settings.get(moduleName, "hideZero")) currentResourceIcon.alpha = 0;
     }
+
+    this.resourceIcons.visible = this._canViewMode(this.document.getFlag(moduleName, "displayIcons") ?? 0);
 };
 
 function updateResourceIconValues() {
@@ -224,7 +238,7 @@ function refreshPatch(wrapper) {
     if (!this.resourceIcons) return this;
 
     if (game.settings.get(moduleName, "combatOnly") && !this.combatant) this.resourceIcons.visible = false;
-    else this.resourceIcons.visible = this._canViewMode(this.document.getFlag(moduleName, "displayIcons") ?? 40);
+    else this.resourceIcons.visible = this._canViewMode(this.document.getFlag(moduleName, "displayIcons") ?? 0);
     
     return this;
 }

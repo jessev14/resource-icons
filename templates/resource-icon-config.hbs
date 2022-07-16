@@ -1,4 +1,13 @@
 <form class="flexcol">
+    
+    <div class="form-group">
+        <label>Display Icons</label>
+        <div class="form-fields">
+            <select name="flags.resource-icons.displayIcons" data-dtype="Number">
+                {{selectOptions displayModes selected=displayIcons}}
+            </select>
+        </div>
+    </div>
 
     <nav class="sheet-tabs tabs" data-group="main">
         <a class="item" data-tab="icon1"> Icon 1</a>
@@ -12,7 +21,8 @@
             <label>Resource</label>
             <div class="form-fields">
                 {{#if ../expertMode}}
-                    <input type="text" name="flags.resource-icons.iconData.{{key}}.resource" value="{{icon.resource}}" placeholder="resource data path" />
+                <input type="text" name="flags.resource-icons.iconData.{{key}}.resource" value="{{icon.resource}}"
+                    placeholder="resource data path" />
                 {{else}}
                 <select class="bar-attribute" name="flags.resource-icons.iconData.{{key}}.resource">
                     {{#select icon.resource}}

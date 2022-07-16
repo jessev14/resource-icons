@@ -30,7 +30,7 @@ export class ResourceIconConfig extends FormApplication {
         const data = {};
 
         let iconData = objectData.flags?.[moduleName]?.iconData;
-        if (!iconData) {
+        if (!Object.values(iconData).length) {
             const empty = {
                 resource: "",
                 img: "",
@@ -43,13 +43,19 @@ export class ResourceIconConfig extends FormApplication {
                 icon1: empty,
                 icon2: empty,
                 icon3: empty
-            }
+            };
         }
         data.iconData = iconData;
 
         const attributes = TokenDocument.implementation.getTrackedAttributes((isPrototype ? this.object.data.data : this.object.actor.data.data ) ?? {});
         const resourceChoices = TokenDocument.implementation.getTrackedAttributeChoices(attributes);
         data.resourceChoices = resourceChoices;
+
+        data.displayIcons = objectData.flags?.[moduleName]?.displayIcons ?? 0;
+        data.displayModes = Object.entries(CONST.TOKEN_DISPLAY_MODES).reduce((obj, e) => {
+            obj[e[1]] = game.i18n.localize(`TOKEN.DISPLAY_${e[0]}`);
+            return obj;
+        }, {});
 
         data.expertMode = game.settings.get(moduleName, "expertMode");
         
