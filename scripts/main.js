@@ -119,6 +119,7 @@ Hooks.on("renderTokenConfig", (app, html, data) => {
 Hooks.on("preCreateActor", (actor, data, options, userID) => {
     const actorType = data.type;
     const actorTypeDefaultData = game.settings.get(moduleName, "actorTypeDefaults")?.[actorType];
+    if (!actorTypeDefaultData) return;
 
     return actor.data.update({
         [`token.flags.${moduleName}.displayIcons`]: actorTypeDefaultData.displayIcons ?? 0,
