@@ -113,7 +113,7 @@ Hooks.on("renderTokenConfig", (app, html, data) => {
 
     html[0].querySelector(`div.tab[data-tab="resources"]`).append(displayIcons);
 
-    ui.activeWindow.setPosition({height: "auto"});
+    ui.activeWindow.setPosition({ height: "auto" });
 });
 
 Hooks.on("preCreateActor", (actor, data, options, userID) => {
@@ -128,16 +128,16 @@ Hooks.on("preCreateActor", (actor, data, options, userID) => {
 
 Hooks.on("updateActor", (actor, diff, options, userID) => {
     if (!diff.data) return;
-    
+
     const tokens = actor.getActiveTokens();
     for (const token of tokens) token.updateResourceIconValues();
 });
 
-Hooks.on("createCombatant", (combatant, options, userID) => {   
+Hooks.on("createCombatant", (combatant, options, userID) => {
     combatant.token.object.refresh();
 });
 
-Hooks.on("deleteCombatant", (combatant, options, userID) => {   
+Hooks.on("deleteCombatant", (combatant, options, userID) => {
     combatant.token.object.refresh();
 });
 
@@ -167,7 +167,7 @@ async function drawResourceIcons() {
     };
 
     this.resourceIcons.removeChildren().forEach(c => c.destroy({ children: true }));
-    
+
     for (const icon of Object.keys(iconData)) {
         // Create PIXI container for current icon
         this.resourceIcons[icon] = this.resourceIcons.addChild(new PIXI.Container());
@@ -257,7 +257,7 @@ function refreshPatch(wrapper) {
 
     if (game.settings.get(moduleName, "combatOnly") && !this.combatant) this.resourceIcons.visible = false;
     else this.resourceIcons.visible = this._canViewMode(this.document.getFlag(moduleName, "displayIcons") ?? 0);
-    
+
     return this;
 }
 
