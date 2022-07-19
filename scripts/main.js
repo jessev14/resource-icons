@@ -145,8 +145,26 @@ Hooks.on("deleteCombatant", (combatant, options, userID) => {
 async function drawResourceIcons() {
     if (game.settings.get(moduleName, "combatOnly") && !this.combatant) return;
 
-    const iconData = this.document.getFlag(moduleName, "iconData");
-    if (!iconData || !Object.values(iconData).length) return;
+    const iconData = this.document.getFlag(moduleName, "iconData") ?? {};
+    if (!Object.values(iconData).length) {
+        // Backwards compatibility
+        for (let i = 1; i < 4; i++) {
+            const currentIconData = this.document.data.flags[moduleName]?.[`icon${i}`];
+            if (!currentIconData) continue;
+
+            iconData[`icon${i}`] = {
+                resource: currentIconData.resource,
+                img: currentIconData.img,
+                tint: currentIconData.options?.tint.color,
+                background: currentIconData.options?.background.active ? (currentIconData.options?.background.color || "#000000") : "",
+                border: currentIconData.options?.border.color,
+                shape: "circle"
+            };
+        }
+
+        if (!Object.values(iconData).length) return;
+        else await this.document.setFlag(moduleName, "iconData", iconData);
+    };
 
     this.resourceIcons.removeChildren().forEach(c => c.destroy({ children: true }));
     

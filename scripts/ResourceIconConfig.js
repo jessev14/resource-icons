@@ -29,7 +29,7 @@ export class ResourceIconConfig extends FormApplication {
         const objectData = isPrototype ? this.object.data.token : this.object.data;
         const data = {};
 
-        let iconData = objectData.flags?.[moduleName]?.iconData;
+        let iconData = objectData.flags?.[moduleName]?.iconData ?? {};
         if (!Object.values(iconData).length) {
             const empty = {
                 resource: "",
