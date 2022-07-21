@@ -96,7 +96,8 @@ Hooks.once("init", () => {
 
 
 Hooks.on("renderTokenConfig", (app, html, data) => {
-    const isPrototype = app.object instanceof Actor;
+    if (!app.object.id) return;
+    
     const displayIcons = document.createElement(`div`);
     displayIcons.classList.add("form-group");
     displayIcons.innerHTML = `
