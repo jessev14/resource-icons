@@ -96,25 +96,28 @@ Hooks.once("init", () => {
 
 
 Hooks.on("renderTokenConfig", (app, html, data) => {
-    if (!app.object.id) return;
+    setTimeout(() => {
+        if (!app.object.id) return;
+        
+        const displayIcons = document.createElement(`div`);
+        displayIcons.classList.add("form-group");
+        displayIcons.innerHTML = `
+            <label>Resource Icons</label>
+            <div class="form-fields">
+            </div>
+        `;
     
-    const displayIcons = document.createElement(`div`);
-    displayIcons.classList.add("form-group");
-    displayIcons.innerHTML = `
-        <label>Resource Icons</label>
-        <div class="form-fields">
-        </div>
-    `;
-
-    const resourceIconConfigButton = document.createElement(`button`);
-    resourceIconConfigButton.type = "button";
-    resourceIconConfigButton.innerText = "Customize";
-    resourceIconConfigButton.addEventListener("click", () => new ResourceIconConfig(app.object).render(true));
-    displayIcons.appendChild(resourceIconConfigButton);
-
-    html[0].querySelector(`div.tab[data-tab="resources"]`).append(displayIcons);
-
-    ui.activeWindow.setPosition({ height: "auto" });
+        const resourceIconConfigButton = document.createElement(`button`);
+        resourceIconConfigButton.type = "button";
+        resourceIconConfigButton.innerText = "Customize";
+        resourceIconConfigButton.addEventListener("click", () => new ResourceIconConfig(app.object).render(true));
+        displayIcons.appendChild(resourceIconConfigButton);
+    
+        const resourceTab = html[0].querySelector(`div.tab[data-tab="resources"]`);
+        resourceTab.append(displayIcons);
+    
+        ui.activeWindow.setPosition({ height: "auto" });
+    }, 0);
 });
 
 Hooks.on("preCreateActor", (actor, data, options, userID) => {
