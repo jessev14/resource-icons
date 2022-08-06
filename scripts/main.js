@@ -132,7 +132,7 @@ Hooks.on("preCreateActor", (actor, data, options, userID) => {
 });
 
 Hooks.on("updateActor", (actor, diff, options, userID) => {
-    if (!diff.data) return;
+    //if (!diff.data) return;
 
     const tokens = actor.getActiveTokens();
     for (const token of tokens) token.updateResourceIconValues();
