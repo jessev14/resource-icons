@@ -235,7 +235,10 @@ async function drawResourceIcons() {
 };
 
 function updateResourceIconValues() {
-    for (const [k, v] of Object.entries(this.document.getFlag(moduleName, "iconData"))) {
+    const iconData = this.document.getFlag(moduleName, "iconData");
+    if (!iconData) return;
+
+    for (const [k, v] of Object.entries(iconData)) {
         const resource = foundry.utils.getProperty(this.actor.data.data, v.resource);
         if (resource === null || resource === undefined) continue;
         let value;
