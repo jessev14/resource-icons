@@ -1,5 +1,5 @@
 
-import { moduleName } from "./main.js";
+import { moduleID } from "./main.js";
 
 export class ActorTypeSelector extends FormApplication {
     constructor() {
@@ -8,9 +8,9 @@ export class ActorTypeSelector extends FormApplication {
 
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            id: `${moduleName}-actorTypeSelector`,
+            id: `${moduleID}-actorTypeSelector`,
             title: "Select Actor Type",
-            template: `modules/${moduleName}/templates/actor-type-selector.hbs`
+            template: `modules/${moduleID}/templates/actor-type-selector.hbs`
         });
     }
 
@@ -39,15 +39,15 @@ export class SetDefaults extends FormApplication {
         super();
 
         this.actorType = actorType;
-        this.displayIcons = game.settings.get(moduleName, "actorTypeDefaults")?.[actorType]?.displayIcons;
-        this.iconData = game.settings.get(moduleName, "actorTypeDefaults")?.[actorType]?.iconData;
+        this.displayIcons = game.settings.get(moduleID, "actorTypeDefaults")?.[actorType]?.displayIcons;
+        this.iconData = game.settings.get(moduleID, "actorTypeDefaults")?.[actorType]?.iconData;
     }
 
     static get defaultOptions() {
         return foundry.utils.mergeObject(super.defaultOptions, {
-            id: `${moduleName}-${this.actorType}-defaults`,
-            classes: [moduleName, "sheet"],
-            template: `modules/${moduleName}/templates/resource-icon-config.hbs`,
+            id: `${moduleID}-${this.actorType}-defaults`,
+            classes: [moduleID, "sheet"],
+            template: `modules/${moduleID}/templates/resource-icon-config.hbs`,
             tabs: [
                 { navSelector: '.tabs[data-group="main"]', contentSelector: "form", initial: "icon1" }
             ],
@@ -89,7 +89,7 @@ export class SetDefaults extends FormApplication {
             return obj;
         }, {});
 
-        data.expertMode = game.settings.get(moduleName, "expertMode");
+        data.expertMode = game.settings.get(moduleID, "expertMode");
         
         return data;
     }
@@ -97,13 +97,13 @@ export class SetDefaults extends FormApplication {
     async _updateObject(event, formData) {
         const newDefaultData = {};
         for (const [k, v] of Object.entries(formData)) {
-            const cleanedKey = `${this.actorType}.` + k.replace(`flags.${moduleName}.`, "");
+            const cleanedKey = `${this.actorType}.` + k.replace(`flags.${moduleID}.`, "");
             newDefaultData[cleanedKey] = v;
         }
 
-        const actorTypeDefaults = game.settings.get(moduleName, "actorTypeDefaults")?.iconData ?? {};
+        const actorTypeDefaults = game.settings.get(moduleID, "actorTypeDefaults")?.iconData ?? {};
         foundry.utils.mergeObject(actorTypeDefaults, newDefaultData);
 
-        return game.settings.set(moduleName, "actorTypeDefaults", actorTypeDefaults);
+        return game.settings.set(moduleID, "actorTypeDefaults", actorTypeDefaults);
     }
 }

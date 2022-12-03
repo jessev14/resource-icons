@@ -1,9 +1,11 @@
-import { moduleName } from "./main.js";
+import { moduleID } from "./main.js";
 
 export function containerPosition(iconIndex, tokenWidth, tokenHeight) {
     const iconSize = 0.28 * Math.min(tokenWidth, tokenHeight);
-    const iconAnchor = game.settings.get(moduleName, "iconAnchor");
-    const boundingBox = game.settings.get(moduleName, "boundingBox")
+    //const iconAnchor = game.settings.get(moduleID, "iconAnchor");
+    const iconAnchor = 'top';
+    //const boundingBox = game.settings.get(moduleID, "boundingBox")
+    const boundingBox = 'outside';
 
     let targetDim;
     if (iconAnchor === "top" || iconAnchor === "bottom") targetDim = tokenWidth;
