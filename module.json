@@ -2,10 +2,17 @@
     "id": "resource-icons",
     "title": "Resource Icons",
     "description": "",
-    "author": "enso#0361",
+    "authors": [
+        {
+          "name": "enso#0361",
+          "flags": {}
+        }
+      ],
     "version": "2.0.0",
-    "minimumCoreVersion": "9",
-    "compatibleCoreVersion": "9",
+    "compatibility": {
+        "minimum": "9",
+        "verified": "10"
+      },
     "esmodules": [
         "./scripts/main.js"
     ],
